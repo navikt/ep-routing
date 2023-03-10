@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
+
 internal class Pbuc10Test {
 
     companion object {
@@ -25,6 +26,15 @@ internal class Pbuc10Test {
     }
 
     private val handler = EnhetFactory.hentHandlerFor(P_BUC_10) as Pbuc10
+
+    class IdentifisertPersonTest(
+        override val aktoerId: String,
+        override val fnr: Fodselsnummer?,
+        override val geografiskTilknytning: String?,
+        override val landkode: String?,
+        override val personListe: List<IdentifisertPerson>?,
+        override val personRelasjon: SEDPersonRelasjon?
+    ) : IdentifisertPerson
 
     @Test
     fun `Inneholder diskresjonskode`() {
@@ -42,8 +52,8 @@ internal class Pbuc10Test {
     @Test
     fun `Sak er ugyldig`() {
         val request = mockk<OppgaveRoutingRequest> {
-            every { identifisertPerson } returns IdentifisertPerson(
-                "1231", "ole dunk", "NOR", "1234", SEDPersonRelasjon(
+            every { identifisertPerson } returns IdentifisertPersonTest(
+                aktoerId = "1231", fnr = DUMMY_FNR, landkode = "NOR", geografiskTilknytning = "1234", personListe = null, personRelasjon = SEDPersonRelasjon(
                     DUMMY_FNR, Relasjon.GJENLEVENDE, GJENLEV, SedType.P15000, rinaDocumentId =  "3123123"
                 )
             )
@@ -164,12 +174,11 @@ internal class Pbuc10Test {
     ): OppgaveRoutingRequest {
         return mockk {
             if (hendelse == SENDT)
-                every { identifisertPerson } returns IdentifisertPerson(
-                    "1231", "ole dunk", "NOR", "1234", SEDPersonRelasjon(
+                every { identifisertPerson } returns IdentifisertPersonTest(
+                    aktoerId = "1231", fnr = DUMMY_FNR, landkode = "NOR", geografiskTilknytning = "1234", personListe = null, personRelasjon = SEDPersonRelasjon(
                         DUMMY_FNR, Relasjon.GJENLEVENDE, GJENLEV, SedType.P15000, rinaDocumentId =  "3123123"
                     )
                 )
-
             every { harAdressebeskyttelse } returns false
             every { hendelseType } returns hendelse
             every { saktype } returns ytelse
