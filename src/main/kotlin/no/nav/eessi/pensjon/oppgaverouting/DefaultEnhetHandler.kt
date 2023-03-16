@@ -15,20 +15,20 @@ class DefaultEnhetHandler : EnhetHandler {
 
         return if (request.bosatt == Bosatt.NORGE) {
             if (ageIsBetween18and62) {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLANDSTILSNITT} på grunn av personen er bosatt i norge og alder er NAY")
+                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLANDSTILSNITT} på grunn av personen er bosatt i Norge. Enhet blir NAY")
                 Enhet.UFORE_UTLANDSTILSNITT
             }
             else  {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.NFP_UTLAND_AALESUND} på grunn av personen er bosatt i utlandet og alder er NFP")
+                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.NFP_UTLAND_AALESUND} på grunn av personen er bosatt i utlandet. Enhet blir NFP")
                 Enhet.NFP_UTLAND_AALESUND
             }
         } else {
             if (ageIsBetween18and62) {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLAND} på grunn av personen er bosatt i utlandet og alder er NAY")
+                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLAND} på grunn av personen er bosatt i utlandet. Enhet blir NAY")
                 Enhet.UFORE_UTLAND
             }
             else {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND} på grunn av personen er bosatt i utlandet og alder er NFP")
+                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND} på grunn av personen er bosatt i utlandet. Enhet blir NFP")
                 Enhet.PENSJON_UTLAND
             }
         }
