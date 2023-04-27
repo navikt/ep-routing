@@ -72,11 +72,7 @@ class Pbuc05 : EnhetHandler {
      */
     private fun hentEnhetForGjenlevende(request: OppgaveRoutingRequest): Enhet {
         return when {
-            request.sakInformasjon == null -> {
-                logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING} på grunn av personen er gjenlevende men saksinformasjon mangler")
-                Enhet.ID_OG_FORDELING
-            }
-            request.sakInformasjon.sakType == GENRL -> enhetFraAlderOgLand(request)
+            request.sakInformasjon?.sakType == GENRL -> enhetFraAlderOgLand(request)
             else -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
