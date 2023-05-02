@@ -16,7 +16,7 @@ class Rbuc02 : EnhetHandler {
                 Enhet.DISKRESJONSKODE
             }
             erPersonUgyldig(request.identifisertPerson) -> {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av ingen treff på person")
+                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av ingen treff på ${request.identifisertPerson?.personListe?.size} person(er).")
                 Enhet.ID_OG_FORDELING
             }
             request.sedType == R004 -> {

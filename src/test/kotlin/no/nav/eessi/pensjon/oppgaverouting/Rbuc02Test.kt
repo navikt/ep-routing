@@ -45,6 +45,7 @@ internal class Rbuc02Test {
     fun `Sendt sak med kun én person, men mangler aktorId`() {
         val person = mockk<IdentifisertPerson> {
             every { aktoerId } returns " "
+            every { personListe } returns emptyList()
             every { flereEnnEnPerson() } returns false
         }
 
@@ -71,6 +72,7 @@ internal class Rbuc02Test {
     fun `Sak med flere personer skal til ID og Fordeling`(hendelseType: HendelseType) {
         val person = mockk<IdentifisertPerson> {
             every { aktoerId } returns " "
+            every { personListe } returns emptyList()
             every { flereEnnEnPerson() } returns true
         }
 
@@ -105,6 +107,7 @@ internal class Rbuc02Test {
     fun `SedType R004 skal ikke til Økonomi og Pensjon dersom person er ugyldig`(hendelseType: HendelseType) {
         val person = mockk<IdentifisertPerson> {
             every { aktoerId } returns " "
+            every { personListe } returns emptyList()
             every { flereEnnEnPerson() } returns true
         }
 
