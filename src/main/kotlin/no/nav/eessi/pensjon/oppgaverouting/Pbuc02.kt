@@ -1,7 +1,10 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
 import no.nav.eessi.pensjon.eux.model.buc.SakStatus.AVSLUTTET
-import no.nav.eessi.pensjon.eux.model.buc.SakType.*
+import no.nav.eessi.pensjon.eux.model.buc.SakType.ALDER
+import no.nav.eessi.pensjon.eux.model.buc.SakType.BARNEP
+import no.nav.eessi.pensjon.eux.model.buc.SakType.GJENLEV
+import no.nav.eessi.pensjon.eux.model.buc.SakType.UFOREP
 
 
 /**
@@ -18,7 +21,7 @@ class Pbuc02 : EnhetHandler {
                 Enhet.DISKRESJONSKODE
             }
             erUforeSakAvsluttet(request) -> {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av uføresak er avsluttet")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av uføresak er avsluttet")
                 Enhet.ID_OG_FORDELING
             }
             kanAutomatiskJournalfores(request) -> {
@@ -41,7 +44,7 @@ class Pbuc02 : EnhetHandler {
                         Enhet.PENSJON_UTLAND
                     }
                     else -> {
-                        logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av bosatt norge med ugyldig saktype")
+                        logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av bosatt norge med ugyldig saktype")
                         Enhet.ID_OG_FORDELING
                     }
                 }
@@ -59,7 +62,7 @@ class Pbuc02 : EnhetHandler {
                         Enhet.PENSJON_UTLAND
                     }
                     else -> {
-                        logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av bosatt utland med ugyldig saktype")
+                        logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av bosatt utland med ugyldig saktype")
                         Enhet.ID_OG_FORDELING
                     }
                 }

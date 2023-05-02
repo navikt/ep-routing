@@ -2,7 +2,18 @@ package no.nav.eessi.pensjon.oppgaverouting
 
 
 import no.nav.eessi.pensjon.eux.model.BucType
-import no.nav.eessi.pensjon.eux.model.BucType.*
+import no.nav.eessi.pensjon.eux.model.BucType.H_BUC_07
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_01
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_02
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_03
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_04
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_05
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_06
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_07
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_08
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_09
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_10
+import no.nav.eessi.pensjon.eux.model.BucType.R_BUC_02
 import no.nav.eessi.pensjon.eux.model.SedType
 import no.nav.eessi.pensjon.eux.model.buc.SakType
 import org.slf4j.Logger
@@ -25,27 +36,27 @@ interface EnhetHandler {
     }
 
     fun adresseBeskyttelseLogging(sedType: SedType?, bucType: BucType, enhet: Enhet) {
-        logger.info("Router $sedType i $bucType til ${enhet.enhetsNr} på grunn av adressebeskyttelse")
+        logger.info("$sedType i $bucType gir enhet ${enhet.enhetsNr} på grunn av adressebeskyttelse")
     }
 
     fun automatiskJournalforingLogging(sedType: SedType?, bucType: BucType, enhet: Enhet) {
-        logger.info("Router $sedType i $bucType til ${enhet.enhetsNr} på grunn av automatisk journalføring")
+        logger.info("$sedType i $bucType  gir enhet ${enhet.enhetsNr} på grunn av automatisk journalføring")
     }
 
     fun bosattNorgeLogging(sedType: SedType?, bucType: BucType, enhet: Enhet) {
-        logger.info("Router $sedType i $bucType til ${enhet.enhetsNr} på grunn av personen er bosatt i norge")
+        logger.info("$sedType i $bucType  gir enhet ${enhet.enhetsNr} på grunn av personen er bosatt i norge")
     }
 
     fun bosattNorgeLogging(sedType: SedType?, bucType: BucType, sakType: SakType, enhet: Enhet) {
-        logger.info("Router $sedType i $bucType til ${enhet.enhetsNr} på grunn av saktype: $sakType og personen er bosatt i norge")
+        logger.info("$sedType i $bucType  gir enhet ${enhet.enhetsNr} på grunn av saktype: $sakType og personen er bosatt i norge")
     }
 
     fun bosattUtlandLogging(sedType: SedType?, bucType: BucType, sakType: SakType, enhet: Enhet) {
-        logger.info("Router $sedType i $bucType til ${enhet.enhetsNr} på grunn av saktype: $sakType og personen er bosatt i utlandet")
+        logger.info("$sedType i $bucType  gir enhet ${enhet.enhetsNr} på grunn av saktype: $sakType og personen er bosatt i utlandet")
     }
 
     fun ingenSærreglerLogging(sedType: SedType?, bucType: BucType, enhet: Enhet) {
-        logger.info("Router $sedType i $bucType til ${enhet.enhetsNr} på grunn av ingen særregler ble inntruffet")
+        logger.info("$sedType i $bucType  gir enhet ${enhet.enhetsNr} på grunn av ingen særregler ble inntruffet")
     }
 
 

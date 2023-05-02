@@ -16,11 +16,11 @@ class Rbuc02 : EnhetHandler {
                 Enhet.DISKRESJONSKODE
             }
             erPersonUgyldig(request.identifisertPerson) -> {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av ingen treff på ${request.identifisertPerson?.personListe?.size} person(er).")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av ingen treff på ${request.identifisertPerson?.personListe?.size} person(er).")
                 Enhet.ID_OG_FORDELING
             }
             request.sedType == R004 -> {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.OKONOMI_PENSJON.enhetsNr} på grunn av SED er R004")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.OKONOMI_PENSJON.enhetsNr} på grunn av SED er R004")
                 Enhet.OKONOMI_PENSJON
             }
             kanAutomatiskJournalfores(request) -> {
@@ -33,20 +33,20 @@ class Rbuc02 : EnhetHandler {
 
     private fun hentEnhetForYtelse(request: OppgaveRoutingRequest): Enhet {
         return if (request.hendelseType == HendelseType.SENDT) {
-            logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av traff ingen særregler og SED er sendt")
+            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av traff ingen særregler og SED er sendt")
             Enhet.ID_OG_FORDELING
         } else {
             when (request.saktype) {
                 ALDER -> {
-                    logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av traff ingen særregler og SED er mottatt med sakstype: alder")
+                    logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av traff ingen særregler og SED er mottatt med sakstype: alder")
                     Enhet.PENSJON_UTLAND
                 }
                 UFOREP -> {
-                    logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLAND.enhetsNr} på grunn av traff ingen særregler og SED er mottatt med sakstype: uføre")
+                    logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLAND.enhetsNr} på grunn av traff ingen særregler og SED er mottatt med sakstype: uføre")
                     Enhet.UFORE_UTLAND
                 }
                 else -> {
-                    logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av traff ingen særregler og SED er mottatt men sakstype er hverken alder eller uføre")
+                    logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av traff ingen særregler og SED er mottatt men sakstype er hverken alder eller uføre")
                     Enhet.ID_OG_FORDELING
                 }
             }

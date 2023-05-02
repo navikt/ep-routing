@@ -1,7 +1,9 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
 import no.nav.eessi.pensjon.eux.model.buc.SakStatus.AVSLUTTET
-import no.nav.eessi.pensjon.eux.model.buc.SakType.*
+import no.nav.eessi.pensjon.eux.model.buc.SakType.ALDER
+import no.nav.eessi.pensjon.eux.model.buc.SakType.GJENLEV
+import no.nav.eessi.pensjon.eux.model.buc.SakType.UFOREP
 
 
 class Pbuc10 : EnhetHandler {
@@ -13,7 +15,7 @@ class Pbuc10 : EnhetHandler {
                 Enhet.DISKRESJONSKODE
             }
             erSakUgyldig(request) -> {
-                logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING} på grunn av komplisert sak og person-identifisering")
+                logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING} på grunn av komplisert sak og person-identifisering")
                 Enhet.ID_OG_FORDELING
             }
             kanAutomatiskJournalfores(request) -> {
@@ -28,11 +30,11 @@ class Pbuc10 : EnhetHandler {
         return when {
             request.bosatt == Bosatt.NORGE -> routeNorge(request)
             request.saktype == UFOREP -> {
-                logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLAND} på grunn av bosatt utland og sak er uføre")
+                logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLAND} på grunn av bosatt utland og sak er uføre")
                 Enhet.UFORE_UTLAND
             }
             else -> {
-                logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND} på grunn av bosatt utland og sak er ikke uføre")
+                logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND} på grunn av bosatt utland og sak er ikke uføre")
                 Enhet.PENSJON_UTLAND
             }
         }
@@ -40,17 +42,17 @@ class Pbuc10 : EnhetHandler {
 
     private fun routeNorge(request: OppgaveRoutingRequest): Enhet {
         if (erMottattAlderEllerGjenlev(request)){
-            logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.NFP_UTLAND_AALESUND} på grunn av bosatt Norge, alder eller gjenlevende-sak")
+            logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND} på grunn av bosatt Norge, alder eller gjenlevende-sak")
             return Enhet.NFP_UTLAND_AALESUND
         }
 
         return when (request.saktype) {
             UFOREP -> {
-                logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLANDSTILSNITT} på grunn av, bosatt Norge, uføre-sak")
+                logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLANDSTILSNITT} på grunn av, bosatt Norge, uføre-sak")
                 Enhet.UFORE_UTLANDSTILSNITT
             }
             else -> {
-                logger.info("Router ${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING} på grunn av sak er hverken alder, gjenlevende eller uføre")
+                logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING} på grunn av sak er hverken alder, gjenlevende eller uføre")
                 Enhet.ID_OG_FORDELING
             }
         }

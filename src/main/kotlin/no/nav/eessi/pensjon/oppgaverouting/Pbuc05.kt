@@ -13,7 +13,7 @@ class Pbuc05 : EnhetHandler {
     private fun enhetForSendt(request: OppgaveRoutingRequest): Enhet {
         return when {
             request.sakInformasjon == null -> {
-                logger.info("Router sendt ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende saksinformasjon")
+                logger.info(" ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende saksinformasjon")
                 Enhet.ID_OG_FORDELING
             }
             erGjenlevende(request.identifisertPerson) -> hentEnhetForGjenlevende(request)
@@ -30,18 +30,18 @@ class Pbuc05 : EnhetHandler {
         val personListe = request.identifisertPerson?.personListe ?: emptyList()
 
         if (request.identifisertPerson?.personRelasjon?.fnr == null) {
-            logger.info("Router mottatt ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende fødselsnummer")
+            logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende fødselsnummer")
             return Enhet.ID_OG_FORDELING
         }
 
         return if (personListe.isEmpty()) {
             if (erGjenlevende(request.identifisertPerson)) {
                 if (request.bosatt == Bosatt.NORGE) {
-                    logger.info("Router mottatt ${request.sedType} i ${request.bucType} til ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt Norge og person er gjenlevende")
+                    logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt Norge og person er gjenlevende")
                     Enhet.NFP_UTLAND_AALESUND
                 }
                 else {
-                    logger.info("Router mottatt ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt Norge og person er ikke gjenlevende")
+                    logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt Norge og person er ikke gjenlevende")
                     Enhet.PENSJON_UTLAND
                 }
             } else enhetFraAlderOgLand(request)
@@ -50,7 +50,7 @@ class Pbuc05 : EnhetHandler {
                 personListe.any { it.personRelasjon?.relasjon == Relasjon.FORSORGER } -> enhetFraAlderOgLand(request)
                 personListe.any { it.personRelasjon?.relasjon == Relasjon.BARN } -> enhetFraAlderOgLand(request)
                 else -> {
-                    logger.info("Router mottatt ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av det finnes personrelasjoner men disse er hverken forsørger eller barn")
+                    logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av det finnes personrelasjoner men disse er hverken forsørger eller barn")
                     Enhet.ID_OG_FORDELING
                 }
             }
@@ -113,7 +113,7 @@ class Pbuc05 : EnhetHandler {
      */
     private fun enhetForRelasjonBarn(request: OppgaveRoutingRequest): Enhet {
         if (request.sakInformasjon?.sakId == null) {
-            logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende pesys saksId")
+            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende pesys saksId")
             return Enhet.ID_OG_FORDELING
         }
 
@@ -125,11 +125,11 @@ class Pbuc05 : EnhetHandler {
                 Enhet.AUTOMATISK_JOURNALFORING
             }
             else -> if (request.bosatt == Bosatt.NORGE) {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
                 Enhet.NFP_UTLAND_AALESUND
             }
             else {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
                 Enhet.PENSJON_UTLAND
             }
         }
@@ -170,24 +170,24 @@ class Pbuc05 : EnhetHandler {
     private fun enhetFraAlderOgLand(request: OppgaveRoutingRequest): Enhet {
         return if (request.bosatt == Bosatt.NORGE) {
             if (request.avsenderLand == "DE" && request.fdato.ageIsBetween18and60()) {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLANDSTILSNITT.enhetsNr} på grunn av bosatt norge, avsenderland er DE og alder er mellom 18 og 60")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLANDSTILSNITT.enhetsNr} på grunn av bosatt norge, avsenderland er DE og alder er mellom 18 og 60")
                 Enhet.UFORE_UTLANDSTILSNITT
             }
             else if (request.avsenderLand != "DE" && request.fdato.ageIsBetween18and62()) {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLANDSTILSNITT.enhetsNr} på grunn av bosatt norge, avsenderland ikke er DE og alder er mellom 18 og 62")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLANDSTILSNITT.enhetsNr} på grunn av bosatt norge, avsenderland ikke er DE og alder er mellom 18 og 62")
                 Enhet.UFORE_UTLANDSTILSNITT
             }
             else {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge og alder er NFP")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge og alder er NFP")
                 Enhet.NFP_UTLAND_AALESUND
             }
         } else {
             if (request.fdato.ageIsBetween18and62()) {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.UFORE_UTLAND.enhetsNr} på grunn av bosatt utland og alder er NAY")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLAND.enhetsNr} på grunn av bosatt utland og alder er NAY")
                 Enhet.UFORE_UTLAND
             }
             else {
-                logger.info("Router ${request.sedType} i ${request.bucType} til ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland og alder er NFP")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland og alder er NFP")
                 Enhet.PENSJON_UTLAND
             }
         }
