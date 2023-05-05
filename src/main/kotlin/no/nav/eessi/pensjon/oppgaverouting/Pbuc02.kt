@@ -20,10 +20,17 @@ class Pbuc02 : EnhetHandler {
                 adresseBeskyttelseLogging(request.sedType, request.bucType, Enhet.DISKRESJONSKODE)
                 Enhet.DISKRESJONSKODE
             }
+            /**
+             *     https://confluence.adeo.no/pages/viewpage.action?pageId=544313760
+             *     Denne fases ut da ID_OG_FORDELING kun skal håndtere SED med ukjente FNR/DNR
+
             erUforeSakAvsluttet(request) -> {
-                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av uføresak er avsluttet")
-                Enhet.ID_OG_FORDELING
+            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av uføresak er avsluttet")
+            Enhet.ID_OG_FORDELING
+
             }
+             */
+
             kanAutomatiskJournalfores(request) -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING

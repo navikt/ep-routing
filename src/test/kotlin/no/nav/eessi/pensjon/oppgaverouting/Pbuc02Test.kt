@@ -53,7 +53,7 @@ internal class Pbuc02Test {
             val requestNorge = SENDT.request(UFOREP, "NOR", AVSLUTTET)
 
             assertNotEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.UFORE_UTLAND,
                     handler.finnEnhet(requestNorge),
                     "Skal aldri automatisk journalføres dersom saktype == UFOREP og SakStatus == AVSLUTTET"
             )
@@ -61,7 +61,7 @@ internal class Pbuc02Test {
             val requestUtland = SENDT.request(UFOREP, "SWE", AVSLUTTET)
 
             assertNotEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.UFORE_UTLAND,
                     handler.finnEnhet(requestUtland),
                     "Skal aldri automatisk journalføres dersom saktype == UFOREP og SakStatus == AVSLUTTET"
             )
@@ -87,7 +87,7 @@ internal class Pbuc02Test {
                     handler.finnEnhet(SENDT.request(UFOREP, "NOR"))
             )
             assertEquals(
-                    Enhet.ID_OG_FORDELING,
+                    Enhet.AUTOMATISK_JOURNALFORING,
                     handler.finnEnhet(SENDT.request(UFOREP, "NOR", AVSLUTTET))
             )
             assertEquals(
@@ -115,7 +115,7 @@ internal class Pbuc02Test {
                     handler.finnEnhet(SENDT.request(UFOREP, "SWE"))
             )
             assertEquals(
-                    Enhet.ID_OG_FORDELING,
+                    Enhet.AUTOMATISK_JOURNALFORING,
                     handler.finnEnhet(SENDT.request(UFOREP, "SWE", AVSLUTTET))
             )
             assertEquals(
@@ -188,7 +188,7 @@ internal class Pbuc02Test {
                     handler.finnEnhet(MOTTATT.request(UFOREP, "NOR"))
             )
             assertEquals(
-                    Enhet.ID_OG_FORDELING,
+                    Enhet.UFORE_UTLANDSTILSNITT,
                     handler.finnEnhet(MOTTATT.request(UFOREP, "NOR", AVSLUTTET))
             )
             assertEquals(
@@ -216,7 +216,7 @@ internal class Pbuc02Test {
                     handler.finnEnhet(MOTTATT.request(UFOREP, "SWE"))
             )
             assertEquals(
-                    Enhet.ID_OG_FORDELING,
+                    Enhet.UFORE_UTLAND,
                     handler.finnEnhet(MOTTATT.request(UFOREP, "SWE", AVSLUTTET))
             )
             assertEquals(
