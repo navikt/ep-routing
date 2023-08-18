@@ -168,6 +168,8 @@ class Pbuc05 : EnhetHandler {
      * @return [Enhet] basert på rutingregler.
      */
     private fun enhetFraAlderOgLand(request: OppgaveRoutingRequest): Enhet {
+
+        logger.info("Person er bosatt:  ${request.bosatt}")
         return if (request.bosatt == Bosatt.NORGE) {
             if (request.avsenderLand == "DE" && request.fdato.ageIsBetween18and60()) {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLANDSTILSNITT.enhetsNr} på grunn av bosatt norge, avsenderland er DE og alder er mellom 18 og 60")
@@ -181,7 +183,8 @@ class Pbuc05 : EnhetHandler {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge og alder er NFP")
                 Enhet.NFP_UTLAND_AALESUND
             }
-        } else {
+        }
+        else if (request.bosatt == Bosatt.UTLAND){
             if (request.fdato.ageIsBetween18and62()) {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLAND.enhetsNr} på grunn av bosatt utland og alder er NAY")
                 Enhet.UFORE_UTLAND
@@ -190,6 +193,9 @@ class Pbuc05 : EnhetHandler {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland og alder er NFP")
                 Enhet.PENSJON_UTLAND
             }
+        } else {
+            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av at bosatt er ukjent")
+            Enhet.ID_OG_FORDELING
         }
     }
 }
