@@ -18,10 +18,10 @@ class Pbuc05 : EnhetHandler {
             }
             erGjenlevende(request.identifisertPerson) -> hentEnhetForGjenlevende(request)
             flerePersoner(request) -> hentEnhetForRelasjon(request)
-            kanJournalforesAutomatisk(request) -> {
+/*            kanJournalforesAutomatisk(request) -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
-            }
+            }*/
             else -> enhetFraAlderOgLand(request)
         }
     }
@@ -71,13 +71,15 @@ class Pbuc05 : EnhetHandler {
      * @return Skal returnere [Enhet.AUTOMATISK_JOURNALFORING] dersom det finnes [SakInformasjon]
      */
     private fun hentEnhetForGjenlevende(request: OppgaveRoutingRequest): Enhet {
-        return when {
-            request.sakInformasjon?.sakType == GENRL -> enhetFraAlderOgLand(request)
+        return enhetFraAlderOgLand(request)
+        //return when {
+/*
             else -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
             }
-        }
+*/
+        //}
     }
 
     /**
@@ -116,11 +118,12 @@ class Pbuc05 : EnhetHandler {
             logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende pesys saksId")
             return Enhet.ID_OG_FORDELING
         }
+        //TODO: Her kommer enheten saksbehandler er ansatt (når denne sendes fra RINA, et sted lang, langt der fremme)
 
-        return when (request.sakInformasjon.sakType) {
-           ALDER,
-           UFOREP,
-           OMSORG -> {
+/*        return when (request.sakInformasjon.sakType) {
+            ALDER,
+            UFOREP,
+            OMSORG -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
             }
@@ -131,7 +134,14 @@ class Pbuc05 : EnhetHandler {
             else {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
                 Enhet.PENSJON_UTLAND
-            }
+            }*/
+
+        return if (request.bosatt == Bosatt.NORGE) {
+            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
+            Enhet.NFP_UTLAND_AALESUND
+        } else {
+            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
+            Enhet.PENSJON_UTLAND
         }
     }
 
@@ -142,6 +152,8 @@ class Pbuc05 : EnhetHandler {
      *  hvis ikke regnes saken som gyldig for [Enhet.AUTOMATISK_JOURNALFORING]
      */
     private fun enhetForRelasjonForsorger(request: OppgaveRoutingRequest): Enhet {
+        return enhetFraAlderOgLand(request)
+/*
         return when (request.saktype) {
             null, GENRL -> enhetFraAlderOgLand(request)
             else -> {
@@ -149,6 +161,7 @@ class Pbuc05 : EnhetHandler {
                 Enhet.AUTOMATISK_JOURNALFORING
             }
         }
+*/
     }
 
     /**

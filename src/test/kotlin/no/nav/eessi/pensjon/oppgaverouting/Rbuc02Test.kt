@@ -38,7 +38,7 @@ internal class Rbuc02Test {
 
         val request = SENDT.mockRequest(type = saktype, person = person)
 
-        assertEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(request))
+        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
     }
 
     @Test
@@ -64,7 +64,7 @@ internal class Rbuc02Test {
 
         val request = MOTTATT.mockRequest(type = saktype, person = person)
 
-        assertNotEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(request))
+        assertNotEquals("9999", handler.finnEnhet(request).enhetsNr)
     }
 
     @ParameterizedTest

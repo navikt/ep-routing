@@ -31,10 +31,10 @@ class Pbuc02 : EnhetHandler {
             }
              */
 
-            kanAutomatiskJournalfores(request) -> {
+/*            kanAutomatiskJournalfores(request) -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
-            }
+            }*/
             request.bosatt == Bosatt.NORGE -> {
                 when (request.saktype) {
                     UFOREP -> {

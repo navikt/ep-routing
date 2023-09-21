@@ -23,10 +23,10 @@ class Rbuc02 : EnhetHandler {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.OKONOMI_PENSJON.enhetsNr} på grunn av SED er R004")
                 Enhet.OKONOMI_PENSJON
             }
-            kanAutomatiskJournalfores(request) -> {
+/*            kanAutomatiskJournalfores(request) -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
-            }
+            }*/
             else -> hentEnhetForYtelse(request)
         }
     }
