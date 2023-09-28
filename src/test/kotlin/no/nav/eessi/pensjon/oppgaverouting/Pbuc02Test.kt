@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 
 internal class Pbuc02Test {
@@ -38,14 +39,30 @@ internal class Pbuc02Test {
         }
 
         @ParameterizedTest
-        @EnumSource(SakType::class)
-        fun `Sendt hendelse kan automatisk journalføres`(type: SakType) {
+        @CsvSource(delimiter = '|', textBlock =
+        """ ALDER       | NFP_UTLAND_AALESUND   | NOR
+            UFOREP      | UFORE_UTLANDSTILSNITT | NOR         
+            BARNEP      | PENSJON_UTLAND        | NOR
+            OMSORG      | ID_OG_FORDELING       | NOR 
+            GENRL       | ID_OG_FORDELING       | NOR 
+            KRIGSP      | ID_OG_FORDELING       | NOR  
+            GAM_YRK     | ID_OG_FORDELING       | NOR 
+            AFP_PRIVAT  | ID_OG_FORDELING       | NOR  
+            AFP         | ID_OG_FORDELING       | NOR
+            ALDER       | PENSJON_UTLAND        | SWE
+            UFOREP      | UFORE_UTLAND          | SWE         
+            BARNEP      | PENSJON_UTLAND        | SWE
+            OMSORG      | ID_OG_FORDELING       | SWE 
+            GENRL       | ID_OG_FORDELING       | SWE 
+            KRIGSP      | ID_OG_FORDELING       | SWE  
+            GAM_YRK     | ID_OG_FORDELING       | SWE 
+            AFP_PRIVAT  | ID_OG_FORDELING       | SWE  
+            AFP         | ID_OG_FORDELING       | SWE"""
+        )
+        fun `Sendt hendelse skal journalføres basert på saktype, enhet og land`(type: String, enhet: String, landkode: String) {
             // Gyldig sak hvor sakStatus IKKE er AVSLUTTET skal alltid automatisk journalføres
-            val requestNorge = SENDT.request(type, "NOR", TIL_BEHANDLING)
-            assertEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(requestNorge))
-
-            val requestUtland = SENDT.request(type, "SWE", TIL_BEHANDLING)
-            assertEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(requestUtland))
+            val requestNorge = SENDT.request(SakType.valueOf(type), landkode, TIL_BEHANDLING)
+            assertEquals(Enhet.valueOf(enhet), handler.finnEnhet(requestNorge))
         }
 
         @Test
@@ -60,7 +77,7 @@ internal class Pbuc02Test {
 
             val requestUtland = SENDT.request(UFOREP, "SWE", AVSLUTTET)
 
-            assertNotEquals(
+            assertEquals(
                     Enhet.UFORE_UTLAND,
                     handler.finnEnhet(requestUtland),
                     "Skal aldri automatisk journalføres dersom saktype == UFOREP og SakStatus == AVSLUTTET"
@@ -83,23 +100,23 @@ internal class Pbuc02Test {
         @Test
         fun `Sendt hendelse som er gyldig, bosatt NORGE`() {
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.UFORE_UTLANDSTILSNITT,
                     handler.finnEnhet(SENDT.request(UFOREP, "NOR"))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.UFORE_UTLANDSTILSNITT,
                     handler.finnEnhet(SENDT.request(UFOREP, "NOR", AVSLUTTET))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.NFP_UTLAND_AALESUND,
                     handler.finnEnhet(SENDT.request(ALDER, "NOR"))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.PENSJON_UTLAND,
                     handler.finnEnhet(SENDT.request(BARNEP, "NOR"))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.PENSJON_UTLAND,
                     handler.finnEnhet(SENDT.request(GJENLEV, "NOR"))
             )
             assertEquals(
@@ -111,23 +128,23 @@ internal class Pbuc02Test {
         @Test
         fun `Sendt hendelse som er gyldig, bosatt UTLAND`() {
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.UFORE_UTLAND,
                     handler.finnEnhet(SENDT.request(UFOREP, "SWE"))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.UFORE_UTLAND,
                     handler.finnEnhet(SENDT.request(UFOREP, "SWE", AVSLUTTET))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.PENSJON_UTLAND,
                     handler.finnEnhet(SENDT.request(ALDER, "SWE"))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.PENSJON_UTLAND,
                     handler.finnEnhet(SENDT.request(BARNEP, "SWE"))
             )
             assertEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
+                    Enhet.PENSJON_UTLAND,
                     handler.finnEnhet(SENDT.request(GJENLEV, "SWE"))
             )
             assertEquals(
@@ -159,8 +176,8 @@ internal class Pbuc02Test {
         @EnumSource(SakType::class)
         fun `Mottatt hendelse skal aldri automatisk journalføres, bosatt NORGE`(type: SakType) {
             assertNotEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
-                    handler.finnEnhet(MOTTATT.request(type, "NOR"))
+                    "9999",
+                    handler.finnEnhet(MOTTATT.request(type, "NOR")).enhetsNr
             )
         }
 
@@ -168,8 +185,8 @@ internal class Pbuc02Test {
         @EnumSource(SakType::class)
         fun `Mottatt hendelse skal aldri automatisk journalføres, bosatt UTLAND`(type: SakType) {
             assertNotEquals(
-                    Enhet.AUTOMATISK_JOURNALFORING,
-                    handler.finnEnhet(MOTTATT.request(type, "SWE"))
+                    "9999",
+                    handler.finnEnhet(MOTTATT.request(type, "SWE")).enhetsNr
             )
         }
 

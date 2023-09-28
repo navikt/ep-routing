@@ -31,7 +31,7 @@ internal class Pbuc03Test {
 
     @ParameterizedTest
     @EnumSource(SakType::class)
-    fun `Automatisk journalføring, uavhengig av saktype`(type: SakType) {
+    fun `Enhet skal være UFORE_UTLANDSTILSNITT, uavhengig av saktype`(type: SakType) {
         val request = mockk<OppgaveRoutingRequest> {
             every { hendelseType } returns HendelseType.SENDT
             every { harAdressebeskyttelse } returns false
@@ -40,9 +40,10 @@ internal class Pbuc03Test {
             every { sakInformasjon?.sakId } returns "555"
             every { sedType } returns null
             every { bucType } returns P_BUC_03
+            every { bosatt } returns Bosatt.NORGE
         }
 
-        assertEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(request))
+        assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
     }
 
     @Test

@@ -10,10 +10,10 @@ class Pbuc03 : EnhetHandler {
                 adresseBeskyttelseLogging(request.sedType, request.bucType, Enhet.DISKRESJONSKODE)
                 Enhet.DISKRESJONSKODE
             }
-            kanAutomatiskJournalfores(request) ->  {
+/*            kanAutomatiskJournalfores(request) ->  {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
-            }
+            }*/
             request.bosatt == Bosatt.NORGE ->  {
                 bosattNorgeLogging(request.sedType, request.bucType, Enhet.UFORE_UTLANDSTILSNITT)
                 Enhet.UFORE_UTLANDSTILSNITT
@@ -25,11 +25,11 @@ class Pbuc03 : EnhetHandler {
         }
     }
 
-    override fun kanAutomatiskJournalfores(request: OppgaveRoutingRequest): Boolean {
+/*    override fun kanAutomatiskJournalfores(request: OppgaveRoutingRequest): Boolean {
         return request.run {
             saktype != null
                     && !aktorId.isNullOrBlank()
                     && !sakInformasjon?.sakId.isNullOrBlank()
         }
-    }
+    }*/
 }

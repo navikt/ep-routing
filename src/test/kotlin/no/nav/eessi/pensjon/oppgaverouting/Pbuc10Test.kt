@@ -71,7 +71,7 @@ internal class Pbuc10Test {
     }
 
     @Test
-    fun `Kan automatisk journalføres`() {
+    fun `Kan ikke automatisk journalføres`() {
         val request = mockk<OppgaveRoutingRequest>(relaxed = true) {
             every { hendelseType } returns SENDT
             every { saktype } returns UFOREP
@@ -79,7 +79,7 @@ internal class Pbuc10Test {
             every { sakInformasjon?.sakId } returns "555"
         }
 
-        assertEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(request))
+        assertEquals(Enhet.UFORE_UTLAND, handler.finnEnhet(request))
     }
 
     @Test

@@ -18,10 +18,12 @@ class Pbuc10 : EnhetHandler {
                 logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} til ${Enhet.ID_OG_FORDELING} på grunn av komplisert sak og person-identifisering")
                 Enhet.ID_OG_FORDELING
             }
+/*
             kanAutomatiskJournalfores(request) -> {
                 automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
                 Enhet.AUTOMATISK_JOURNALFORING
             }
+*/
             else -> enhetFraLand(request)
         }
     }

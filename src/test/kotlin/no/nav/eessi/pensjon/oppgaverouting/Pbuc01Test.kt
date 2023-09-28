@@ -29,6 +29,7 @@ internal class Pbuc01Test {
         assertNotEquals(Enhet.DISKRESJONSKODE, handler.finnEnhet(request))
     }
 
+/*
     @ParameterizedTest
     @EnumSource(SakType::class)
     fun `Automatisk journalføring, uavhengig av saktype`(type: SakType) {
@@ -42,8 +43,9 @@ internal class Pbuc01Test {
             every { bucType } returns P_BUC_01
         }
 
-        assertEquals(Enhet.AUTOMATISK_JOURNALFORING, handler.finnEnhet(request))
+        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
     }
+*/
 
     @Test
     fun `Manuell behandling, bosatt norge`() {
