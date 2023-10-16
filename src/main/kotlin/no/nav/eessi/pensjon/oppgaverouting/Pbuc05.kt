@@ -16,12 +16,8 @@ class Pbuc05 : EnhetHandler {
                 logger.info(" ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende saksinformasjon")
                 Enhet.ID_OG_FORDELING
             }
-            erGjenlevende(request.identifisertPerson) -> hentEnhetForGjenlevende(request)
+            erGjenlevende(request.identifisertPerson) -> enhetFraAlderOgLand(request)
             flerePersoner(request) -> hentEnhetForRelasjon(request)
-/*            kanJournalforesAutomatisk(request) -> {
-                automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
-                Enhet.AUTOMATISK_JOURNALFORING
-            }*/
             else -> enhetFraAlderOgLand(request)
         }
     }
@@ -66,23 +62,6 @@ class Pbuc05 : EnhetHandler {
             person?.personRelasjon?.relasjon == Relasjon.GJENLEVENDE
 
     /**
-     * Henter enhet for [Relasjon.GJENLEVENDE]
-     *
-     * @return Skal returnere [Enhet.AUTOMATISK_JOURNALFORING] dersom det finnes [SakInformasjon]
-     */
-    private fun hentEnhetForGjenlevende(request: OppgaveRoutingRequest): Enhet {
-        return enhetFraAlderOgLand(request)
-        //return when {
-/*
-            else -> {
-                automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
-                Enhet.AUTOMATISK_JOURNALFORING
-            }
-*/
-        //}
-    }
-
-    /**
      * Sjekker om saken inneholder flere identifiserte personer.
      *
      * @return true dersom det finnes mer enn én person.
@@ -102,7 +81,6 @@ class Pbuc05 : EnhetHandler {
 
         return when {
             personer.any { it.personRelasjon?.relasjon == Relasjon.BARN } -> enhetForRelasjonBarn(request)
-            personer.any { it.personRelasjon?.relasjon == Relasjon.FORSORGER } -> enhetForRelasjonForsorger(request)
             else -> enhetFraAlderOgLand(request)
         }
     }
@@ -110,8 +88,7 @@ class Pbuc05 : EnhetHandler {
     /**
      * Henter korrekt enhet for [Relasjon.BARN]
      *
-     * @return Skal returnere [Enhet.AUTOMATISK_JOURNALFORING] dersom saktype er [Saktype.ALDER],
-     *  [Saktype.UFOREP], eller [Saktype.OMSORG]. Hvis ikke skal forenklet rutingregel følges.
+     * @return Skal returnere forenklet rutingregel .
      */
     private fun enhetForRelasjonBarn(request: OppgaveRoutingRequest): Enhet {
         if (request.sakInformasjon?.sakId == null) {
@@ -120,22 +97,6 @@ class Pbuc05 : EnhetHandler {
         }
         //TODO: Her kommer enheten saksbehandler er ansatt (når denne sendes fra RINA, et sted lang, langt der fremme)
 
-/*        return when (request.sakInformasjon.sakType) {
-            ALDER,
-            UFOREP,
-            OMSORG -> {
-                automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
-                Enhet.AUTOMATISK_JOURNALFORING
-            }
-            else -> if (request.bosatt == Bosatt.NORGE) {
-                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
-                Enhet.NFP_UTLAND_AALESUND
-            }
-            else {
-                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
-                Enhet.PENSJON_UTLAND
-            }*/
-
         return if (request.bosatt == Bosatt.NORGE) {
             logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
             Enhet.NFP_UTLAND_AALESUND
@@ -143,35 +104,6 @@ class Pbuc05 : EnhetHandler {
             logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
             Enhet.PENSJON_UTLAND
         }
-    }
-
-    /**
-     * Henter enhet for [Relasjon.FORSORGER]
-     *
-     * @return Følger rutingregler i [enhetFraAlderOgLand] dersom sakinfo mangler eller sakstype er [Saktype.GENRL],
-     *  hvis ikke regnes saken som gyldig for [Enhet.AUTOMATISK_JOURNALFORING]
-     */
-    private fun enhetForRelasjonForsorger(request: OppgaveRoutingRequest): Enhet {
-        return enhetFraAlderOgLand(request)
-/*
-        return when (request.saktype) {
-            null, GENRL -> enhetFraAlderOgLand(request)
-            else -> {
-                automatiskJournalforingLogging(request.sedType, request.bucType, Enhet.AUTOMATISK_JOURNALFORING)
-                Enhet.AUTOMATISK_JOURNALFORING
-            }
-        }
-*/
-    }
-
-    /**
-     * Sjekker om [Saktype] er av en type som er godkjent for [Enhet.AUTOMATISK_JOURNALFORING]
-     *
-     * @return Boolean-verdi som indikerer om saken kan journalføres automatisk.
-     */
-    private fun kanJournalforesAutomatisk(request: OppgaveRoutingRequest): Boolean {
-        val sakInfo = request.sakInformasjon
-        return (kanAutomatiskJournalfores(request) && sakInfo != null && sakInfo.harGenerellSakTypeMedTilknyttetSaker().not())
     }
 
     /**
