@@ -10,7 +10,7 @@ class Hbuc07 : EnhetHandler {
             enhetFraAlderOgLand(request)
     }
 
-    private fun enhetFraAlderOgLand(request: OppgaveRoutingRequest): Enhet {
+    override fun enhetFraAlderOgLand(request: OppgaveRoutingRequest): Enhet {
         val ageIsBetween18and60 = request.fdato.ageIsBetween18and60()
 
         return if (request.bosatt == Bosatt.NORGE) {

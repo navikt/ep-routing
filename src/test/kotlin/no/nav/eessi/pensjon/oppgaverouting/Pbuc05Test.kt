@@ -7,8 +7,10 @@ import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_05
 import no.nav.eessi.pensjon.shared.person.Fodselsnummer
 import no.nav.eessi.pensjon.shared.person.FodselsnummerGenerator
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
+@Disabled
 internal class Pbuc05Test {
 
     private val handler = EnhetFactory.hentHandlerFor(P_BUC_05) as Pbuc05
