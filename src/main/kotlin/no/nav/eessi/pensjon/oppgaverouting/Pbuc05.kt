@@ -17,7 +17,7 @@ class Pbuc05 : EnhetHandler {
                 Enhet.ID_OG_FORDELING
             }
             erGjenlevende(request.identifisertPerson) -> enhetFraAlderOgLand(request)
-            flerePersoner(request) -> hentEnhetForRelasjon(request)
+            harRelasjoner(request.identifisertPerson) -> hentEnhetForRelasjon(request)
             else -> enhetFraAlderOgLand(request)
         }
     }
@@ -66,8 +66,8 @@ class Pbuc05 : EnhetHandler {
      *
      * @return true dersom det finnes mer enn én person.
      */
-    private fun flerePersoner(request: OppgaveRoutingRequest): Boolean {
-        return request.identifisertPerson?.personListe?.isNotEmpty() ?: false
+    private fun harRelasjoner(identifisertPerson: IdentifisertPerson?): Boolean {
+        return identifisertPerson?.personListe?.isNotEmpty() ?: false
     }
 
     /**
