@@ -15,7 +15,7 @@ class Hbuc07 : EnhetHandler {
 
         return if (request.bosatt == Bosatt.NORGE) {
             if (ageIsBetween18and60) Enhet.UFORE_UTLANDSTILSNITT
-            else Enhet.NFP_UTLAND_OSLO
+            else Enhet.FAMILIE_OG_PENSJONSYTELSER_OSLO
         } else {
             if (ageIsBetween18and60) Enhet.UFORE_UTLAND
             else Enhet.PENSJON_UTLAND
