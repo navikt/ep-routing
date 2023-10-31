@@ -39,10 +39,10 @@ internal class Hbuc07Test {
         }
 
         every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()
-        assertEquals(Enhet.NFP_UTLAND_OSLO, handler.finnEnhet(request))
+        assertEquals(Enhet.FAMILIE_OG_PENSJONSYTELSER_OSLO, handler.finnEnhet(request))
 
         every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
-        assertEquals(Enhet.NFP_UTLAND_OSLO, handler.finnEnhet(request))
+        assertEquals(Enhet.FAMILIE_OG_PENSJONSYTELSER_OSLO, handler.finnEnhet(request))
 
         every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
