@@ -1,5 +1,7 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
+import no.nav.eessi.pensjon.eux.model.buc.SakType
+
 class DefaultEnhetHandler : EnhetHandler {
     override fun finnEnhet(request: OppgaveRoutingRequest): Enhet {
         return if (request.harAdressebeskyttelse) {
@@ -14,7 +16,7 @@ class DefaultEnhetHandler : EnhetHandler {
         val ageIsBetween18and62 = request.fdato.ageIsBetween18and62()
 
         return if (request.bosatt == Bosatt.NORGE) {
-            if (ageIsBetween18and62) {
+            if (ageIsBetween18and62 && request.saktype != SakType.GJENLEV) {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLANDSTILSNITT} på grunn av personen er bosatt i Norge. Enhet blir NAY")
                 Enhet.UFORE_UTLANDSTILSNITT
             }
@@ -23,7 +25,7 @@ class DefaultEnhetHandler : EnhetHandler {
                 Enhet.NFP_UTLAND_AALESUND
             }
         } else {
-            if (ageIsBetween18and62) {
+            if (ageIsBetween18and62 && request.saktype != SakType.GJENLEV) {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLAND} på grunn av personen er bosatt i utlandet. Enhet blir NAY")
                 Enhet.UFORE_UTLAND
             }
