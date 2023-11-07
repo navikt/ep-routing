@@ -13,7 +13,7 @@ class Pbuc05 : EnhetHandler {
     private fun enhetForSendt(request: OppgaveRoutingRequest): Enhet {
         return when {
             request.sakInformasjon == null -> {
-                logger.info(" ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende saksinformasjon")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende saksinformasjon")
                 Enhet.ID_OG_FORDELING
             }
             erGjenlevende(request.identifisertPerson) -> enhetFraAlderOgLand(request)
