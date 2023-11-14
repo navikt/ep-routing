@@ -21,7 +21,7 @@ class DefaultEnhetHandler : EnhetHandler {
                 Enhet.UFORE_UTLANDSTILSNITT
             }
             else  {
-                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND} på grunn av personen er bosatt i utlandet. Enhet blir NFP")
+                logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND} på grunn av personen er bosatt i Norge. Enhet blir NFP")
                 Enhet.NFP_UTLAND_AALESUND
             }
         } else {
