@@ -1,7 +1,6 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
 import no.nav.eessi.pensjon.eux.model.buc.SakType.*
-import no.nav.eessi.pensjon.oppgaverouting.Bosatt.*
 import no.nav.eessi.pensjon.oppgaverouting.Enhet.*
 
 
@@ -13,15 +12,15 @@ class Pbuc10 : EnhetHandler {
                 adresseBeskyttelseLogging(request.sedType, request.bucType, DISKRESJONSKODE)
                 DISKRESJONSKODE
             }
-            request.bosatt == NORGE && (request.hendelseType == HendelseType.MOTTATT && (request.saktype == ALDER || request.saktype == GJENLEV)) -> {
+            request.bosatt == Bosatt.NORGE && (request.hendelseType == HendelseType.MOTTATT && (request.saktype == ALDER || request.saktype == GJENLEV)) -> {
                 logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet $NFP_UTLAND_AALESUND på grunn av bosatt Norge, alder eller gjenlevende-sak")
                 NFP_UTLAND_AALESUND
             }
-            request.bosatt == NORGE && request.saktype == UFOREP -> {
+            request.bosatt == Bosatt.NORGE && request.saktype == UFOREP -> {
                 logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet $UFORE_UTLANDSTILSNITT på grunn av, bosatt Norge, uføre-sak")
                 UFORE_UTLANDSTILSNITT
             }
-            request.bosatt == NORGE && request.saktype != UFOREP -> {
+            request.bosatt == Bosatt.NORGE && request.saktype != UFOREP -> {
                 logger.info("${request.hendelseType} ${request.sedType} i ${request.bucType} gir enhet $ID_OG_FORDELING på grunn av sak er hverken alder, gjenlevende eller uføre")
                 ID_OG_FORDELING
             }
