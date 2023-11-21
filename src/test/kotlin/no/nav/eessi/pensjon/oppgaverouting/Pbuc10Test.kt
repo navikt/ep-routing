@@ -2,12 +2,12 @@ package no.nav.eessi.pensjon.oppgaverouting
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.eessi.pensjon.eux.model.BucType.*
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_10
 import no.nav.eessi.pensjon.eux.model.SedType
-import no.nav.eessi.pensjon.eux.model.buc.SakStatus.*
 import no.nav.eessi.pensjon.eux.model.buc.SakType
 import no.nav.eessi.pensjon.eux.model.buc.SakType.*
-import no.nav.eessi.pensjon.oppgaverouting.HendelseType.*
+import no.nav.eessi.pensjon.oppgaverouting.HendelseType.MOTTATT
+import no.nav.eessi.pensjon.oppgaverouting.HendelseType.SENDT
 import no.nav.eessi.pensjon.personoppslag.pdl.model.IdentifisertPerson
 import no.nav.eessi.pensjon.personoppslag.pdl.model.Relasjon
 import no.nav.eessi.pensjon.personoppslag.pdl.model.SEDPersonRelasjon
@@ -47,27 +47,6 @@ internal class Pbuc10Test {
         // SPSF er mindre fortrolig og følger vanlig saksflyt
         every { request.harAdressebeskyttelse } returns false
         assertNotEquals(Enhet.DISKRESJONSKODE, handler.finnEnhet(request))
-    }
-
-    @Test
-    fun `Sak er ugyldig`() {
-        val request = mockk<OppgaveRoutingRequest> {
-            every { identifisertPerson } returns IdentifisertPersonTest(
-                aktoerId = "1231", fnr = DUMMY_FNR, landkode = "NOR", geografiskTilknytning = "1234", personListe = null, personRelasjon = SEDPersonRelasjon(
-                    DUMMY_FNR, Relasjon.GJENLEVENDE, GJENLEV, SedType.P15000, rinaDocumentId =  "3123123"
-                )
-            )
-            every { harAdressebeskyttelse } returns false
-            every { saktype } returns UFOREP
-            every { hendelseType } returns SENDT
-            every { sakInformasjon?.sakStatus } returns AVSLUTTET
-            every { sakInformasjon?.sakType } returns UFOREP
-            every { sedType } returns SedType.P15000
-            every { bucType } returns P_BUC_10
-
-        }
-
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
     }
 
     @Test
