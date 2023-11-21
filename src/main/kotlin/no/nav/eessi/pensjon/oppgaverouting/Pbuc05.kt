@@ -1,8 +1,8 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
-import no.nav.eessi.pensjon.eux.model.buc.SakType.*
 import no.nav.eessi.pensjon.personoppslag.pdl.model.IdentifisertPerson
 import no.nav.eessi.pensjon.personoppslag.pdl.model.Relasjon
+import no.nav.eessi.pensjon.personoppslag.pdl.model.Relasjon.*
 
 class Pbuc05 : EnhetHandler {
     override fun finnEnhet(request: OppgaveRoutingRequest): Enhet {
@@ -23,14 +23,14 @@ class Pbuc05 : EnhetHandler {
     }
 
     private fun enhetForMottatt(request: OppgaveRoutingRequest): Enhet {
-        val personListe = request.identifisertPerson?.personListe ?: emptyList()
+        val personRelasjonerListe = request.identifisertPerson?.personListe ?: emptyList()
 
         if (request.identifisertPerson?.personRelasjon?.fnr == null) {
             logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende fødselsnummer")
             return Enhet.ID_OG_FORDELING
         }
 
-        return if (personListe.isEmpty()) {
+        return if (personRelasjonerListe.isEmpty()) {
             if (erGjenlevende(request.identifisertPerson)) {
                 if (request.bosatt == Bosatt.NORGE) {
                     logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt Norge og person er gjenlevende")
@@ -43,8 +43,7 @@ class Pbuc05 : EnhetHandler {
             } else enhetFraAlderOgLand(request)
         } else {
             when {
-                personListe.any { it.personRelasjon?.relasjon == Relasjon.FORSORGER } -> enhetFraAlderOgLand(request)
-                personListe.any { it.personRelasjon?.relasjon == Relasjon.BARN } -> enhetFraAlderOgLand(request)
+                personRelasjonerListe.any { it.personRelasjon?.relasjon in listOf(FORSORGER, BARN) } -> enhetFraAlderOgLand(request)
                 else -> {
                     logger.info("Mottatt ${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av det finnes personrelasjoner men disse er hverken forsørger eller barn")
                     Enhet.ID_OG_FORDELING
@@ -59,7 +58,7 @@ class Pbuc05 : EnhetHandler {
      * @return true dersom personen har [Relasjon.GJENLEVENDE]
      */
     private fun erGjenlevende(person: IdentifisertPerson?): Boolean =
-            person?.personRelasjon?.relasjon == Relasjon.GJENLEVENDE
+            person?.personRelasjon?.relasjon == GJENLEVENDE
 
     /**
      * Sjekker om saken inneholder flere identifiserte personer.
@@ -80,7 +79,7 @@ class Pbuc05 : EnhetHandler {
         val personer = request.identifisertPerson?.personListe ?: return enhetFraAlderOgLand(request)
 
         return when {
-            personer.any { it.personRelasjon?.relasjon == Relasjon.BARN } -> enhetForRelasjonBarn(request)
+            personer.any { it.personRelasjon?.relasjon == BARN } -> enhetForRelasjonBarn(request)
             else -> enhetFraAlderOgLand(request)
         }
     }
