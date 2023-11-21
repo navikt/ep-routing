@@ -29,24 +29,6 @@ internal class Pbuc01Test {
         assertNotEquals(Enhet.DISKRESJONSKODE, handler.finnEnhet(request))
     }
 
-/*
-    @ParameterizedTest
-    @EnumSource(SakType::class)
-    fun `Automatisk journalføring, uavhengig av saktype`(type: SakType) {
-        val request = mockk<OppgaveRoutingRequest> {
-            every { hendelseType } returns HendelseType.SENDT
-            every { harAdressebeskyttelse } returns false
-            every { saktype } returns type
-            every { aktorId } returns "111"
-            every { sakInformasjon?.sakId } returns "555"
-            every { sedType } returns null
-            every { bucType } returns P_BUC_01
-        }
-
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
-    }
-*/
-
     @Test
     fun `Manuell behandling, bosatt norge`() {
         val request = mockk<OppgaveRoutingRequest> {
