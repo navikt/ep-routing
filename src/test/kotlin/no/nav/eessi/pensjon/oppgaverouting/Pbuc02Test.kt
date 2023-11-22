@@ -2,12 +2,14 @@ package no.nav.eessi.pensjon.oppgaverouting
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.eessi.pensjon.eux.model.BucType.*
+import no.nav.eessi.pensjon.eux.model.BucType.P_BUC_02
 import no.nav.eessi.pensjon.eux.model.buc.SakStatus
-import no.nav.eessi.pensjon.eux.model.buc.SakStatus.*
+import no.nav.eessi.pensjon.eux.model.buc.SakStatus.AVSLUTTET
+import no.nav.eessi.pensjon.eux.model.buc.SakStatus.TIL_BEHANDLING
 import no.nav.eessi.pensjon.eux.model.buc.SakType
 import no.nav.eessi.pensjon.eux.model.buc.SakType.*
-import no.nav.eessi.pensjon.oppgaverouting.HendelseType.*
+import no.nav.eessi.pensjon.oppgaverouting.HendelseType.MOTTATT
+import no.nav.eessi.pensjon.oppgaverouting.HendelseType.SENDT
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Nested
@@ -42,7 +44,7 @@ internal class Pbuc02Test {
         @CsvSource(delimiter = '|', textBlock =
         """ ALDER       | NFP_UTLAND_AALESUND   | NOR
             UFOREP      | UFORE_UTLANDSTILSNITT | NOR         
-            BARNEP      | PENSJON_UTLAND        | NOR
+            BARNEP      | NFP_UTLAND_AALESUND   | NOR
             OMSORG      | ID_OG_FORDELING       | NOR 
             GENRL       | ID_OG_FORDELING       | NOR 
             KRIGSP      | ID_OG_FORDELING       | NOR  
@@ -112,11 +114,11 @@ internal class Pbuc02Test {
                     handler.finnEnhet(SENDT.request(ALDER, "NOR"))
             )
             assertEquals(
-                    Enhet.PENSJON_UTLAND,
+                    Enhet.NFP_UTLAND_AALESUND,
                     handler.finnEnhet(SENDT.request(BARNEP, "NOR"))
             )
             assertEquals(
-                    Enhet.PENSJON_UTLAND,
+                    Enhet.NFP_UTLAND_AALESUND,
                     handler.finnEnhet(SENDT.request(GJENLEV, "NOR"))
             )
             assertEquals(
@@ -213,11 +215,11 @@ internal class Pbuc02Test {
                     handler.finnEnhet(MOTTATT.request(ALDER, "NOR"))
             )
             assertEquals(
-                    Enhet.PENSJON_UTLAND,
+                    Enhet.NFP_UTLAND_AALESUND,
                     handler.finnEnhet(MOTTATT.request(BARNEP, "NOR"))
             )
             assertEquals(
-                    Enhet.PENSJON_UTLAND,
+                    Enhet.NFP_UTLAND_AALESUND,
                     handler.finnEnhet(MOTTATT.request(GJENLEV, "NOR"))
             )
             assertEquals(
