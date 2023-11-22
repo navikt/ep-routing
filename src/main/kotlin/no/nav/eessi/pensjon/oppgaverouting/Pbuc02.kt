@@ -1,10 +1,7 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
 import no.nav.eessi.pensjon.eux.model.buc.SakStatus.AVSLUTTET
-import no.nav.eessi.pensjon.eux.model.buc.SakType.ALDER
-import no.nav.eessi.pensjon.eux.model.buc.SakType.BARNEP
-import no.nav.eessi.pensjon.eux.model.buc.SakType.GJENLEV
-import no.nav.eessi.pensjon.eux.model.buc.SakType.UFOREP
+import no.nav.eessi.pensjon.eux.model.buc.SakType.*
 
 
 /**
@@ -44,7 +41,7 @@ class Pbuc02 : EnhetHandler {
                     BARNEP,
                     GJENLEV -> {
                         bosattNorgeLogging(request.sedType, request. bucType, request.saktype, Enhet.PENSJON_UTLAND)
-                        Enhet.PENSJON_UTLAND
+                        Enhet.NFP_UTLAND_AALESUND
                     }
                     else -> {
                         logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av bosatt norge med ugyldig saktype")
