@@ -1,5 +1,11 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.9.22'
+    }
+}
 
 plugins {
+    id "org.jetbrains.kotlin.jvm" version "$kotlinVersion"
     id "org.openrepose.gradle.plugins.jaxb" version "2.5.0"
 }
 
