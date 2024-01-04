@@ -24,7 +24,7 @@ dependencies {
     implementation("no.nav.eessi.pensjon:ep-metrics:2.0.48")
     implementation("no.nav.eessi.pensjon:ep-logging:2.1.43")
     implementation("no.nav.eessi.pensjon:ep-eux:2.1.90")
-    implementation("no.nav.eessi.pensjon:ep-personoppslag:13.1.60")
+    implementation("no.nav.eessi.pensjon:ep-personoppslag:13.1.62")
 
     //Jackson json
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
