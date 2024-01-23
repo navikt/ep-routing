@@ -31,13 +31,13 @@ internal class Pbuc05Test {
 
         val fnr_61 = FodselsnummerGenerator.generateFnrForTest(61)
 
-        every { request.fdato } returns Fodselsnummer.fra(fnr_61)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(fnr_61)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_63)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_63)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
     }
 
@@ -50,13 +50,13 @@ internal class Pbuc05Test {
             every { bucType } returns P_BUC_05
         }
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_61)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_61)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_54)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_54)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
     }
@@ -71,13 +71,13 @@ internal class Pbuc05Test {
             every { bucType } returns P_BUC_05
         }
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_63)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_63)!!.getBirthDate()!!
         assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_54)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_54)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLAND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(request))
 
     }
@@ -91,13 +91,13 @@ internal class Pbuc05Test {
             every { bucType } returns P_BUC_05
         }
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_63)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_63)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_54)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_54)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
     }
 

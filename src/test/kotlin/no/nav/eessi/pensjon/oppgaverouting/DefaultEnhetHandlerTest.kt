@@ -3,6 +3,8 @@ package no.nav.eessi.pensjon.oppgaverouting
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.eessi.pensjon.eux.model.BucType
+import no.nav.eessi.pensjon.eux.model.SedType
+import no.nav.eessi.pensjon.eux.model.buc.SakType
 
 import no.nav.eessi.pensjon.shared.person.Fodselsnummer
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -36,58 +38,61 @@ internal class DefaultEnhetHandlerTest {
 
     @ParameterizedTest
     @EnumSource(value = BucType::class, names = ["P_BUC_06", "P_BUC_07", "P_BUC_08", "P_BUC_09"])
-    fun `Bosatt norge`(bucType: BucType) {
-        val request = mockk<OppgaveRoutingRequest>(relaxed = true) {
+    fun `Bosatt norge`(buc: BucType) {
+        val request = mockk<OppgaveRoutingRequest>(relaxed = true){
             every { bosatt } returns Bosatt.NORGE
+            every { bucType } returns buc
         }
 
-        val handler = EnhetFactory.hentHandlerFor(bucType)
+        val handler = EnhetFactory.hentHandlerFor(buc)
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
     }
 
     @ParameterizedTest
     @EnumSource(value = BucType::class, names = ["P_BUC_06", "P_BUC_07", "P_BUC_08", "P_BUC_09"])
-    fun `Bosatt utland`(bucType: BucType) {
+    fun `Bosatt utland`(buc: BucType) {
         val request = mockk<OppgaveRoutingRequest>(relaxed = true) {
             every { bosatt } returns Bosatt.UTLAND
+            every { bucType } returns buc
         }
 
-        val handler = EnhetFactory.hentHandlerFor(bucType)
+        val handler = EnhetFactory.hentHandlerFor(buc)
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()!!
         assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLAND, handler.finnEnhet(request))
     }
 
     @ParameterizedTest
     @EnumSource(value = BucType::class, names = ["P_BUC_06", "P_BUC_07", "P_BUC_08", "P_BUC_09"])
-    fun `Bosatt norge uføre mellom 18 til 62 år`(bucType: BucType) {
+    fun `Bosatt norge uføre mellom 18 til 62 år`(buc: BucType) {
         val request = mockk<OppgaveRoutingRequest>(relaxed = true) {
             every { bosatt } returns Bosatt.NORGE
+            every { bucType } returns buc
         }
 
-        val handler = EnhetFactory.hentHandlerFor(bucType)
+        val handler = EnhetFactory.hentHandlerFor(buc)
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.NFP_UTLAND_AALESUND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
     }
 

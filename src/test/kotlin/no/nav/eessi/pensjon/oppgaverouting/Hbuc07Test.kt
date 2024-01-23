@@ -38,13 +38,13 @@ internal class Hbuc07Test {
             every { bosatt } returns Bosatt.NORGE
         }
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()!!
         assertEquals(Enhet.FAMILIE_OG_PENSJONSYTELSER_OSLO, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.FAMILIE_OG_PENSJONSYTELSER_OSLO, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLANDSTILSNITT, handler.finnEnhet(request))
     }
 
@@ -54,13 +54,13 @@ internal class Hbuc07Test {
             every { bosatt } returns Bosatt.UTLAND
         }
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_OVER_60)!!.getBirthDate()!!
         assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_BARN)!!.getBirthDate()!!
         assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(request))
 
-        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()
+        every { request.fdato } returns Fodselsnummer.fra(FNR_VOKSEN)!!.getBirthDate()!!
         assertEquals(Enhet.UFORE_UTLAND, handler.finnEnhet(request))
     }
 }
