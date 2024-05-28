@@ -2,11 +2,13 @@ package no.nav.eessi.pensjon.oppgaverouting
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.eessi.pensjon.eux.model.BucType.*
+import no.nav.eessi.pensjon.eux.model.BucType.R_BUC_02
 import no.nav.eessi.pensjon.eux.model.SedType
 import no.nav.eessi.pensjon.eux.model.buc.SakType
 import no.nav.eessi.pensjon.eux.model.buc.SakType.*
-import no.nav.eessi.pensjon.oppgaverouting.HendelseType.*
+import no.nav.eessi.pensjon.oppgaverouting.Enhet.*
+import no.nav.eessi.pensjon.oppgaverouting.HendelseType.MOTTATT
+import no.nav.eessi.pensjon.oppgaverouting.HendelseType.SENDT
 import no.nav.eessi.pensjon.personoppslag.pdl.model.IdentifisertPerson
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -22,10 +24,10 @@ internal class Rbuc02Test {
     @EnumSource(HendelseType::class)
     fun `Verifiser håndtering av diskresjonskode`(hendelseType: HendelseType) {
         val ikkeFortrolig = hendelseType.mockRequest()
-        assertNotEquals(Enhet.DISKRESJONSKODE, handler.finnEnhet(ikkeFortrolig))
+        assertNotEquals(DISKRESJONSKODE, handler.finnEnhet(ikkeFortrolig))
 
         val strengtFortrolig = hendelseType.mockRequest(harAdressebeskyttelse = true)
-        assertEquals(Enhet.DISKRESJONSKODE, handler.finnEnhet(strengtFortrolig))
+        assertEquals(DISKRESJONSKODE, handler.finnEnhet(strengtFortrolig))
     }
 
     @ParameterizedTest
@@ -38,7 +40,7 @@ internal class Rbuc02Test {
 
         val request = SENDT.mockRequest(type = saktype, person = person)
 
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
+        assertEquals(OKONOMI_PENSJON, handler.finnEnhet(request))
     }
 
     @Test
@@ -51,7 +53,7 @@ internal class Rbuc02Test {
 
         val request = SENDT.mockRequest(type = mockk(), person = person)
 
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
+        assertEquals(ID_OG_FORDELING, handler.finnEnhet(request))
     }
 
     @ParameterizedTest
@@ -78,7 +80,7 @@ internal class Rbuc02Test {
 
         val request = hendelseType.mockRequest(type = ALDER, person = person)
 
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
+        assertEquals(ID_OG_FORDELING, handler.finnEnhet(request))
     }
 
     @ParameterizedTest
@@ -86,7 +88,7 @@ internal class Rbuc02Test {
     fun `Sak med ukjent person skal til ID og Fordeling`(hendelseType: HendelseType) {
         val request = hendelseType.mockRequest(type = ALDER, person = null)
 
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
+        assertEquals(ID_OG_FORDELING, handler.finnEnhet(request))
     }
 
     @ParameterizedTest
@@ -99,7 +101,7 @@ internal class Rbuc02Test {
 
         val request = hendelseType.mockRequest(sedType = SedType.R004, person = person)
 
-        assertEquals(Enhet.OKONOMI_PENSJON, handler.finnEnhet(request))
+        assertEquals(OKONOMI_PENSJON, handler.finnEnhet(request))
     }
 
     @ParameterizedTest
@@ -113,7 +115,7 @@ internal class Rbuc02Test {
 
         val request = hendelseType.mockRequest(sedType = SedType.R004, person = person)
 
-        assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
+        assertEquals(ID_OG_FORDELING, handler.finnEnhet(request))
     }
 
     @Test
@@ -124,15 +126,15 @@ internal class Rbuc02Test {
         }
 
         val forventPensjonUtland = MOTTATT.mockRequest(type = ALDER, person = person)
-        assertEquals(Enhet.PENSJON_UTLAND, handler.finnEnhet(forventPensjonUtland))
+        assertEquals(OKONOMI_PENSJON, handler.finnEnhet(forventPensjonUtland))
 
         val forventUforeUtland = MOTTATT.mockRequest(type = UFOREP, person = person)
-        assertEquals(Enhet.UFORE_UTLAND, handler.finnEnhet(forventUforeUtland))
+        assertEquals(OKONOMI_PENSJON, handler.finnEnhet(forventUforeUtland))
 
         listOf(OMSORG, GJENLEV, BARNEP, GENRL)
                 .forEach { saktype ->
                     val request = MOTTATT.mockRequest(type = saktype, person = person)
-                    assertEquals(Enhet.ID_OG_FORDELING, handler.finnEnhet(request))
+                    assertEquals(OKONOMI_PENSJON, handler.finnEnhet(request))
                 }
     }
 
