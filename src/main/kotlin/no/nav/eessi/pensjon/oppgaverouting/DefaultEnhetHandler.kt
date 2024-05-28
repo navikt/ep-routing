@@ -12,6 +12,7 @@ class DefaultEnhetHandler : EnhetHandler {
             enhetFraAlderOgLand(request)
     }
 
+    //TODO Her må vi ta hensyn til saktype og alder ved bestemming av enhet det skal sendes til
     private fun enhetFraAlderOgLand(request: OppgaveRoutingRequest): Enhet {
         val ageIsBetween18and62 = request.fdato.ageIsBetween18and62()
 
