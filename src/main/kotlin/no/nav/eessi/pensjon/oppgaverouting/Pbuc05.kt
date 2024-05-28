@@ -1,5 +1,6 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
+import no.nav.eessi.pensjon.eux.model.buc.SakType
 import no.nav.eessi.pensjon.personoppslag.pdl.model.IdentifisertPerson
 import no.nav.eessi.pensjon.personoppslag.pdl.model.Relasjon
 import no.nav.eessi.pensjon.personoppslag.pdl.model.Relasjon.*
@@ -94,14 +95,27 @@ class Pbuc05 : EnhetHandler {
             logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av manglende pesys saksId")
             return Enhet.ID_OG_FORDELING
         }
-        //TODO: Her kommer enheten saksbehandler er ansatt (når denne sendes fra RINA, et sted lang, langt der fremme)
 
-        return if (request.bosatt == Bosatt.NORGE) {
-            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
-            Enhet.NFP_UTLAND_AALESUND
-        } else {
-            logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
-            Enhet.PENSJON_UTLAND
+        //TODO: Her kommer enheten saksbehandler er ansatt (når denne sendes fra RINA, et sted lang, langt der fremme)
+        return when (request.bosatt) {
+            Bosatt.NORGE -> {
+                if (request.saktype == SakType.UFOREP) {
+                    logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLANDSTILSNITT.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
+                    Enhet.UFORE_UTLANDSTILSNITT
+                } else {
+                    logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.NFP_UTLAND_AALESUND.enhetsNr} på grunn av bosatt norge med personrelasjon: Barn ")
+                    Enhet.NFP_UTLAND_AALESUND
+                }
+            }
+            else -> {
+                if (request.saktype == SakType.UFOREP) {
+                    logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.UFORE_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
+                    Enhet.UFORE_UTLAND
+                } else {
+                        logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.PENSJON_UTLAND.enhetsNr} på grunn av bosatt utland med personrelasjon: Barn ")
+                        Enhet.PENSJON_UTLAND
+                }
+            }
         }
     }
 
