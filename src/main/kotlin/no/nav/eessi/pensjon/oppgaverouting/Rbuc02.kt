@@ -1,6 +1,6 @@
 package no.nav.eessi.pensjon.oppgaverouting
 
-import no.nav.eessi.pensjon.eux.model.SedType.*
+import no.nav.eessi.pensjon.eux.model.SedType.R004
 import no.nav.eessi.pensjon.eux.model.buc.SakType.ALDER
 import no.nav.eessi.pensjon.eux.model.buc.SakType.UFOREP
 import no.nav.eessi.pensjon.personoppslag.pdl.model.IdentifisertPerson
@@ -19,7 +19,7 @@ class Rbuc02 : EnhetHandler {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.ID_OG_FORDELING.enhetsNr} på grunn av ingen treff på ${request.identifisertPerson?.personListe?.size} person(er).")
                 Enhet.ID_OG_FORDELING
             }
-            request.sedType in listOf(R004, R005, R006)  -> {
+            request.sedType == R004 -> {
                 logger.info("${request.sedType} i ${request.bucType} gir enhet ${Enhet.OKONOMI_PENSJON.enhetsNr} på grunn av SED er R004")
                 Enhet.OKONOMI_PENSJON
             }
