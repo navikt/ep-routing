@@ -17,27 +17,28 @@ group = "no.nav.eessi.pensjon"
 dependencies {
     // Spring Framework BOM-fil overstyrer så vi får siste patch-versjon av Spring Framework
 
-    implementation(platform("org.springframework:spring-framework-bom:6.2.12"))
+    implementation(platform("org.springframework:spring-framework-bom:7.0.1"))
     implementation("org.springframework:spring-web")
     implementation("org.springframework:spring-context")
 
-    implementation("no.nav.eessi.pensjon:ep-metrics:2.1.16")
-    implementation("no.nav.eessi.pensjon:ep-logging:2.3.21")
-    implementation("no.nav.eessi.pensjon:ep-eux:2.5.30")
-    implementation("no.nav.eessi.pensjon:ep-personoppslag:13.3.54")
+    implementation("no.nav.eessi.pensjon:ep-metrics:2.1.19")
+    implementation("no.nav.eessi.pensjon:ep-logging:2.3.25")
+    implementation("no.nav.eessi.pensjon:ep-eux:2.6.4")
+    implementation("no.nav.eessi.pensjon:ep-personoppslag:13.3.57") {
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
 
-    //pensjon og jaxb
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
-    implementation('org.glassfish.jaxb:jaxb-runtime:2.3.9')
-    implementation("no.nav.tjenestespesifikasjoner:pensjonsinformasjon-v1-tjenestespesifikasjon:2643.2f3e8e9")
+        //pensjon og jaxb
+        implementation 'javax.xml.bind:jaxb-api:2.3.1'
+        implementation('org.glassfish.jaxb:jaxb-runtime:2.3.9')
+        implementation("no.nav.tjenestespesifikasjoner:pensjonsinformasjon-v1-tjenestespesifikasjon:2643.2f3e8e9")
 
-    implementation("ch.qos.logback:logback-classic:1.5.21")
+        implementation("ch.qos.logback:logback-classic:1.5.21")
 
-    
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.springframework:spring-test")
-    testImplementation("io.mockk:mockk:1.14.6")
+
+        testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testImplementation("org.springframework:spring-test")
+        testImplementation("io.mockk:mockk:1.14.6")
+    }
 }
