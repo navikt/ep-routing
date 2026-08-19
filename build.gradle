@@ -25,7 +25,7 @@ dependencies {
     implementation("no.nav.eessi.pensjon:ep-metrics:3.0.34")
     implementation("no.nav.eessi.pensjon:ep-eux:3.0.85")
     implementation("no.nav.eessi.pensjon:ep-personoppslag:14.0.81")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.2")
     implementation("ch.qos.logback:logback-classic:1.6.3")
 
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
