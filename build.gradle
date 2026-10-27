@@ -23,7 +23,7 @@ dependencies {
     implementation("org.springframework:spring-context")
 
     implementation("no.nav.eessi.pensjon:ep-metrics:3.0.44")
-    implementation("no.nav.eessi.pensjon:ep-eux:3.1.14")
+    implementation("no.nav.eessi.pensjon:ep-eux:3.1.24")
     implementation("no.nav.eessi.pensjon:ep-personoppslag:14.0.114")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.4")
     implementation("ch.qos.logback:logback-classic:1.6.6")
